@@ -70,16 +70,16 @@ node {
 	InputStream contents123 = new ByteArrayInputStream(content123.getBytes());	// storing the contents
 	properties123.load(contents123)	
 	contents123 = null
-	sh'completed'
+	sh'echo completed'
             Reason = "lockVar stage Failed"
-            sh 'hello'
+            
 			//JobName = "testinglock2/latest"
             Sonar_project_name = "testinglock2_latest"
             lockVar = "testinglock2_latest"
             def BRANCH_NAME = "latest"
-			sh 'reading'
+			sh 'echo startedreadingreading'
            	JobName = properties123.JOB_NAME
-			sh 'reading failed'
+			sh 'echo reading failed'
 			def branch_name1 = properties.branch_name
 			if(BRANCH_NAME.startsWith('PR-'))	//if(JobName.contains('PR-'))
 			{
