@@ -76,7 +76,9 @@ node {
             Sonar_project_name = "testinglock2_latest"
             lockVar = "testinglock2_latest"
             def BRANCH_NAME = "latest"
+			sh 'reading'
            	JobName = properties123.JOB_NAME
+			sh 'reading failed'
 			def branch_name1 = properties.branch_name
 			if(BRANCH_NAME.startsWith('PR-'))	//if(JobName.contains('PR-'))
 			{
