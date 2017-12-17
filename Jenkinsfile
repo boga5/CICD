@@ -72,7 +72,8 @@ node {
 	contents123 = null
 	sh'completed'
             Reason = "lockVar stage Failed"
-            //JobName = "testinglock2/latest"
+            sh 'hello'
+			//JobName = "testinglock2/latest"
             Sonar_project_name = "testinglock2_latest"
             lockVar = "testinglock2_latest"
             def BRANCH_NAME = "latest"
