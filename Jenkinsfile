@@ -70,16 +70,16 @@ node {
 	InputStream contents123 = new ByteArrayInputStream(content123.getBytes());	// storing the contents
 	properties123.load(contents123)	
 	contents123 = null
-	sh'echo completed'
+	//sh'echo completed'
             Reason = "lockVar stage Failed"
-            
+            JobName = properties123.JOB_NAME
 			//JobName = "testinglock2/latest"
-            Sonar_project_name = "testinglock2_latest"
-            lockVar = "testinglock2_latest"
-            def BRANCH_NAME = "latest"
-			sh 'echo startedreadingreading'
-           	JobName = properties123.JOB_NAME
-			sh 'echo reading failed'
+            //Sonar_project_name = "testinglock2_latest"
+           // lockVar = "testinglock2_latest"
+            def BRANCH_NAME = properties123.BRANCH_NAME
+		//	sh 'echo startedreadingreading'
+           	
+			//sh 'echo reading failed'
 			def branch_name1 = properties.branch_name
 			if(BRANCH_NAME.startsWith('PR-'))	//if(JobName.contains('PR-'))
 			{
