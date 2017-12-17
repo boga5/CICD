@@ -63,6 +63,7 @@ node {
 /****************************** Stage that creates lock variable and SonarQube variable ******************************/
 		stage ('Reading Branch Varibles ')	{
 			sh 'env >Jenkins_env'
+			sh 'ls'
 			sh'reading'
 				def content123 = readFile './Jenkins_env'				// variable to store .env file contents
 	Properties properties123 = new Properties()	// creating an object for Properties class
