@@ -63,11 +63,13 @@ node {
 /****************************** Stage that creates lock variable and SonarQube variable ******************************/
 		stage ('Reading Branch Varibles ')	{
 			sh 'env >Jenkins_env'
+			sh'reading'
 				def content123 = readFile './Jenkins_env'				// variable to store .env file contents
 	Properties properties123 = new Properties()	// creating an object for Properties class
 	InputStream contents123 = new ByteArrayInputStream(content.getBytes());	// storing the contents
 	properties123.load(contents123)	
 	contents123 = null
+	sh'completed'
             Reason = "lockVar stage Failed"
             //JobName = "testinglock2/latest"
             Sonar_project_name = "testinglock2_latest"
