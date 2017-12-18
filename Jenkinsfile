@@ -54,68 +54,44 @@ node {
 /****************************** Git Checkout Stage ******************************/
 		stage ('Checkout') {
 			Reason = "GIT Checkout Failed"
-			//checkout scm			
-            checkout([$class: 'GitSCM', branches: [[name: '*/latest']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory']], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/SnehaKailasa/CICD.git']]])			}
-
+			checkout scm
+		}	//Checkout SCM stage ends
+      
 // assigning the jarname to this variable aquired from pom.xml by below function //
 		def jar_name = getMavenBuildArtifactName()
 
 /****************************** Stage that creates lock variable and SonarQube variable ******************************/
 		stage ('Reading Branch Varibles ')	{
-		//	sh 'env >Jenkins_env'
-		//	sh'echo reading'
-	     //   content = readFile './Jenkins_env'				// variable to store .env file contents
-	     //   Properties jenkins_properties = new Properties()	// creating an object for Properties class
-	    //    contents = new ByteArrayInputStream(content.getBytes());	// storing the contents
-	    //    jenkins_properties.load(contents)	
-	    //    contents = null
-	    //    sh'echo completed'
-            Reason = " Reading Branch Varibles stage Failed"
+		    Reason = " Reading Branch Varibles stage Failed"
             JobName = "${JOB_NAME}"
-
-			//JobName = "testinglock2/latest"
-            //Sonar_project_name = "testinglock2_latest"
-           // lockVar = "testinglock2_latest"
-          // def git_branch = "${BRANCH_NAME}"
-
-            //lock_resource_name = 'testing'
-            //Sonar_project_name = 'testing'
-		//	sh 'echo startedreadingreading'
-           	
-			//sh 'echo reading failed'
-			
-			if("${BRANCH_NAME}".startsWith('PR-'))	//if(JobName.contains('PR-'))
+			if("${BRANCH_NAME}".startsWith('PR-'))
 			{
-                //def target_branch = "${CHANGE_TARGET}"
-				def index = JobName.indexOf("/");
+                def index = JobName.indexOf("/");
 				lock_resource_name = JobName.substring(0 , index)+"_"+"${CHANGE_TARGET}"
                 Sonar_project_name = lock_resource_name + "PR"
-				 //println index; println lock_resource_name; println Sonar_project_name;
 			}
 			else
 			{
 				 def index = JobName.indexOf("/");
 				 lock_resource_name = JobName.substring(0 , index)+"_"+"${BRANCH_NAME}"
 				 Sonar_project_name = lock_resource_name
-				// println index; println lock_resource_name; println Sonar_project_name;
 			} 
-		}
+		}	// Reading branch variable stage ends
 	
 /****************************** Building the Application and performing SonarQube analysis ******************************/	
 		stage ('Maven Build') {
 			Reason = "Maven Build Failed"
-			rtMaven.deployer server: server, snapshotRepo: 'fortna_snapshot', releaseRepo: 'fortna_release'			//Deploying artifacts to this repo //
-			rtMaven.deployer.deployArtifacts = false																//this will not publish artifacts soon after build succeeds	//
-			rtMaven.tool = 'maven'																					//Defining maven tool //
+			rtMaven.deployer server: server, snapshotRepo: "${docker_properties.snapshot_repo}", releaseRepo: "${docker_properties.release_repo}"			//Deploying artifacts to this repo //
+			rtMaven.deployer.deployArtifacts = false		//this will not publish artifacts soon after build succeeds	//
+			rtMaven.tool = 'maven'							//Defining maven tool //
 			// Maven build starts here //
 		//	withSonarQubeEnv {
 				def mvn_version = tool 'maven'
-				//echo "${mvn_version}"
 				withEnv( ["PATH+MAVEN=${mvn_version}/bin",'Sonar_Project_Name=' + "${Sonar_project_name}"]  ) {
 					buildInfo = rtMaven.run pom: 'pom.xml', goals: 'clean install -Dmaven.test.skip=true'// $SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.projectKey=${Sonar_Project_Name} -Dsonar.projectName=${Sonar_Project_Name}'
 				}
 			//}
-		}
+		}	//Maven Build stage ends 
 
 /****************************** Docker Compose and Robot Framework testing on container ******************************/
 		stage ('Docker Deploy and RFW') {
@@ -126,14 +102,12 @@ node {
 				sh "sudo chmod 777 wait_for_robot.sh "
                 sh './wait_for_robot.sh'
 				robot_result_folder = docker_properties.robot_result_folder
-				//sh 'echo /home/robot/${robot_result_folder}/report.html'
 				step([$class: 'RobotPublisher',
 					outputPath: "/home/robot/${robot_result_folder}",
 					passThreshold: 0,
 					unstableThreshold: 0,
 					otherFiles: ""])
 				// If Robot Framework test case fails, then the build will be failed //	
-            //    println currentBuild.result
 				if("${currentBuild.result}" == "FAILURE")
 					 {	
 						 sh ''' ./clean_up.sh
@@ -144,11 +118,11 @@ node {
 				if(!(JobName.contains('PR-')))
 				{
 					 // ***** Stage for Deploying artifacts to Artifactory ***** //				
-			/*	stage ('Artifacts Deployment'){		
+					/*stage ('Artifacts Deployment'){		
 						Reason = "Artifacts Deployment Failed"
 						rtMaven.deployer.deployArtifacts buildInfo
 						server.publishBuildInfo buildInfo
-					}	*/
+					}*/
 					// ***** Stage for Publishing Docker images ***** //							
 					stage ('Publish Docker Images'){
 						Reason = "Publish Docker Images Failed"
@@ -157,24 +131,24 @@ node {
 						def om_index = docker_properties.om_image_name.indexOf(":");
 						def omImageName = docker_properties.om_image_name.substring(0 , om_index)+":latest"
 						sh """
-							docker tag ${docker_properties.om_image_name} swamykonanki/${docker_properties.om_image_name}
-							docker tag ${docker_properties.om_image_name} swamykonanki/${omImageName}
-							docker tag ${docker_properties.cp_image_name} swamykonanki/${docker_properties.cp_image_name}
-							docker tag ${docker_properties.cp_image_name} swamykonanki/${cpImageName}
+							docker tag ${docker_properties.om_image_name} ${docker_properties.Docker_Reg_Name}/${docker_properties.om_image_name}
+							docker tag ${docker_properties.om_image_name} ${docker_properties.Docker_Reg_Name}/${omImageName}
+							docker tag ${docker_properties.cp_image_name} ${docker_properties.Docker_Reg_Name}/${docker_properties.cp_image_name}
+							docker tag ${docker_properties.cp_image_name} ${docker_properties.Docker_Reg_Name}/${cpImageName}
 							"""
-							docker.withRegistry("https://index.docker.io/v1/", 'DockerCredentialsID'){
-								def customImage1 = docker.image("swamykonanki/${docker_properties.om_image_name}")
+							docker.withRegistry("${docker_properties.Docker_Registry_URL}", "${docker_properties.Docker_Credentials}"){
+								def customImage1 = docker.image("${docker_properties.Docker_Reg_Name}/${docker_properties.om_image_name}")
 								customImage1.push()
-								def customImage2 = docker.image("swamykonanki/${omImageName}")
+								def customImage2 = docker.image("${docker_properties.Docker_Reg_Name}/${omImageName}")
 								customImage2.push()
-								def customImage3 = docker.image("swamykonanki/${docker_properties.cp_image_name}")
+								def customImage3 = docker.image("${docker_properties.Docker_Reg_Name}/${docker_properties.cp_image_name}")
 								customImage3.push()
-								def customImage4 = docker.image("swamykonanki/${cpImageName}")
+								def customImage4 = docker.image("${docker_properties.Docker_Reg_Name}/${cpImageName}")
 								customImage4.push()
 							}
 							sh """docker logout""" 
 					
-					}  //docker push
+					}  //Docker publish stage ends here
 				
 					// ***** Stage for triggering CD pipeline ***** //				
 					stage ('Starting QA job') {
@@ -184,8 +158,8 @@ node {
 					} 
 				}     //if loop
 				sh './clean_up.sh'	
-			}	                   //lock			
-		}							// Docker Deployment and RFW stage ends here //
+			}   //lock			
+		}		// Docker Deployment and RFW stage ends here //
 
 /****************************** Stage for artifacts promotion ******************************/
 /*		stage ('Build Promotions') {
@@ -194,11 +168,11 @@ node {
 				// Mandatory parameters
 				'buildName'          : buildInfo.name,
 				'buildNumber'        : buildInfo.number,
-				'targetRepo'         : 'fortna_release',
+				'targetRepo'         : 'release_repo',
 	 
 				// Optional parameters
 				'comment'            : 'PROMOTION SUCCESSFULLY COMPLETED',
-				'sourceRepo'         : 'fortna_snapshot',
+				'sourceRepo'         : 'snapshot_repo',
 				'status'             : 'Released',
 				'includeDependencies': false,
 				'copy'               : false,
