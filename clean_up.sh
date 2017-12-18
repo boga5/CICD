@@ -32,25 +32,31 @@ then
   docker rm -f $om_container_name
 fi
 #################################################
-image_status=`docker images -a | grep "$robot_image_name"`
+image_name = cut -d":" -f 1
+image_status=`docker images -a | grep "$image_name"`
 
 if [ ! -z "$image_status" ];
 then
   docker rmi -f $robot_image_name
 fi
 ################################################
-image_status=`docker images -a | grep "$cp_image_name"`
+image_name = cut -d":" -f 1
+image_status=`docker images -a | grep "$image_name"`
 
 if [ ! -z "$image_status" ];
 then
   docker rmi -f $cp_image_name
+ # docker rmi -f swamykonanki/$cp_image_name
 fi
 ###############################################
-image_status=`docker images -a | grep "$om_image_name"`
+image_name = cut -d":" -f 1
+image_status=`docker images -a | grep "$image_name"`
 
 if [ ! -z "$image_status" ];
 then
+  #docker rmi -f swamykonanki/$om_image_name
   docker rmi -f $om_image_name
 fi
+
 
 echo "Removed all containers"
