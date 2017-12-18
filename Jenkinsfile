@@ -46,9 +46,9 @@ emailext (
 /****************************** Jenkinsfile execution starts here ******************************/
 node {
 	def content = readFile './.env'				// variable to store .env file contents
-	Properties properties = new Properties()	// creating an object for Properties class
+	Properties docker_properties = new Properties()	// creating an object for Properties class
 	InputStream contents = new ByteArrayInputStream(content.getBytes());	// storing the contents
-	properties.load(contents)	
+	docker_properties.load(contents)	
 	contents = null
 	try {
 /****************************** Git Checkout Stage ******************************/
@@ -65,34 +65,35 @@ node {
 			sh 'env >Jenkins_env'
 			//sh 'ls'
 			//sh'reading'
-	        def content123 = readFile './Jenkins_env'				// variable to store .env file contents
-	        Properties properties123 = new Properties()	// creating an object for Properties class
-	        InputStream contents123 = new ByteArrayInputStream(content123.getBytes());	// storing the contents
-	        properties123.load(contents123)	
-	        contents123 = null
+	        content = readFile './Jenkins_env'				// variable to store .env file contents
+	        Properties jenkins_properties = new Properties()	// creating an object for Properties class
+	        contents = new ByteArrayInputStream(content.getBytes());	// storing the contents
+	        jenkins_properties.load(contents)	
+	        contents = null
 	        //sh'echo completed'
             Reason = "lockVar stage Failed"
-            JobName = properties123.JOB_NAME
+            JobName = jenkins_properties.JOB_NAME
 			//JobName = "testinglock2/latest"
             //Sonar_project_name = "testinglock2_latest"
            // lockVar = "testinglock2_latest"
-            def BRANCH_NAME = properties123.BRANCH_NAME
+            def git_branch = jenkins_properties.BRANCH_NAME
 		//	sh 'echo startedreadingreading'
            	
 			//sh 'echo reading failed'
-			def branch_name1 = properties.branch_name
-			if(BRANCH_NAME.startsWith('PR-'))	//if(JobName.contains('PR-'))
+			
+			if(git_branch.startsWith('PR-'))	//if(JobName.contains('PR-'))
 			{
+                def target_branch = jenkins_properties.CHANGE_TARGET
 				def index = JobName.indexOf("/");
-				lock_resource_name = JobName.substring(0 , index)+"_"+"${branch_name1}"
-				Sonar_project_name = lock_resource_name + "PR" 
-				//println index; println lock_resource_name; println Sonar_project_name;
+				lock_resource_name = JobName.substring(0 , index)+"_"+"${target_branch}"
+                Sonar_project_name = lock_resource_name + "PR"
+				 //println index; println lock_resource_name; println Sonar_project_name;
 			}
 			else
 			{
 				 def index = JobName.indexOf("/");
-				 Sonar_project_name = JobName.substring(0 , index)+"_"+BRANCH_NAME
-				 lock_resource_name = Sonar_project_name
+				 lock_resource_name = JobName.substring(0 , index)+"_"+"${git_branch}"
+				 Sonar_project_name = lock_resource_name
 				// println index; println lock_resource_name; println Sonar_project_name;
 			} 
 		}
@@ -120,10 +121,8 @@ node {
 				// Docker Compose starts // 
 				sh "jarfile_name=${jar_name} /usr/local/bin/docker-compose up -d"
 				sh "sudo chmod 777 wait_for_robot.sh "
-               // sh "sleep 150s"
-				//println "wait_for_robot"
-				sh './wait_for_robot.sh'
-				robot_result_folder = properties.robot_result_folder
+                sh './wait_for_robot.sh'
+				robot_result_folder = docker_properties.robot_result_folder
 				//sh 'echo /home/robot/${robot_result_folder}/report.html'
 				step([$class: 'RobotPublisher',
 					outputPath: "/home/robot/${robot_result_folder}",
@@ -150,15 +149,15 @@ node {
 					// ***** Stage for Publishing Docker images ***** //							
 					stage ('Publish Docker Images'){
 						Reason = "Publish Docker Images Failed"
-						def cp_index = properties.cp_image_name.indexOf(":");								
-						def cpImageName = properties.cp_image_name.substring(0 , cp_index)+":latest"
-						def om_index = properties.om_image_name.indexOf(":");
-						def omImageName = properties.om_image_name.substring(0 , om_index)+":latest"
+						def cp_index = docker_properties.cp_image_name.indexOf(":");								
+						def cpImageName = docker_properties.cp_image_name.substring(0 , cp_index)+":latest"
+						def om_index = docker_properties.om_image_name.indexOf(":");
+						def omImageName = docker_properties.om_image_name.substring(0 , om_index)+":latest"
 						sh """
-							docker tag ${properties.om_image_name} swamykonanki/${properties.om_image_name}
-							docker tag ${properties.om_image_name} swamykonanki/${omImageName}
-							docker tag ${properties.cp_image_name} swamykonanki/${properties.cp_image_name}
-							docker tag ${properties.cp_image_name} swamykonanki/${cpImageName}
+							docker tag ${docker_properties.om_image_name} swamykonanki/${docker_properties.om_image_name}
+							docker tag ${docker_properties.om_image_name} swamykonanki/${omImageName}
+							docker tag ${docker_properties.cp_image_name} swamykonanki/${docker_properties.cp_image_name}
+							docker tag ${docker_properties.cp_image_name} swamykonanki/${cpImageName}
 							"""
 						/*	docker.withRegistry("https://index.docker.io/v1/", 'DockerCredentialsID'){
 								def customImage1 = docker.image("swamykonanki/${properties.om_image_name}")
