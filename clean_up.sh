@@ -32,7 +32,7 @@ then
   docker rm -f $om_container_name
 fi
 #################################################
-image_name = $(echo $robot_image_name| cut -d':' -f 1)
+image_name=$(echo $robot_image_name| cut -d':' -f 1)
 image_status=`docker images -a | grep "$image_name"`
 
 if [ ! -z "$image_status" ];
@@ -40,7 +40,7 @@ then
   docker rmi -f $robot_image_name
 fi
 ################################################
-image_name = $(echo $cp_image_name| cut -d':' -f 1)
+image_name=$(echo $cp_image_name| cut -d':' -f 1)
 image_status=`docker images -a | grep "$image_name"`
 
 if [ ! -z "$image_status" ];
@@ -49,7 +49,7 @@ then
  # docker rmi -f swamykonanki/$cp_image_name
 fi
 ###############################################
-image_name = $(echo $om_image_name| cut -d':' -f 1)
+image_name=$(echo $om_image_name| cut -d':' -f 1)
 image_status=`docker images -a | grep "$image_name"`
 
 if [ ! -z "$image_status" ];
