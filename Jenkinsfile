@@ -139,16 +139,16 @@ node {
 						 exit 1'''
 					 } 
 				// If it is a GitHub PR job, then this part doesn't execute //					 
-				/*if(!(JobName.contains('PR-')))
+				if(!(JobName.contains('PR-')))
 				{
 					 // ***** Stage for Deploying artifacts to Artifactory ***** //				
-				stage ('Artifacts Deployment'){		
+			/*	stage ('Artifacts Deployment'){		
 						Reason = "Artifacts Deployment Failed"
 						rtMaven.deployer.deployArtifacts buildInfo
 						server.publishBuildInfo buildInfo
-					}	
+					}	*/
 					// ***** Stage for Publishing Docker images ***** //							
-					stage ('Publish Docker Images'){
+					/*stage ('Publish Docker Images'){
 						Reason = "Publish Docker Images Failed"
 						def cp_index = properties.cp_image_name.indexOf(":");								
 						def cpImageName = properties.cp_image_name.substring(0 , cp_index)+":latest"
@@ -172,15 +172,15 @@ node {
 							}
 							sh """docker logout"""
 					
-					}
+					} */ //docker push
 				
 					// ***** Stage for triggering CD pipeline ***** //				
-					stage ('Starting ART job') {
+					stage ('Starting QA job') {
 					Reason = "Trriggering downStream Job Failed"
-                    Job_name = Sonar_project_name + "QA"
+                    Job_name = Sonar_project_name + "_QA"
 		   			 	build job: Job_name//, parameters: [[$class: 'StringParameterValue', name: 'var1', value: 'var1_value']]
 					} 
-				}*/     //if loop
+				}     //if loop
 				sh './clean_up.sh'	
 			}	                   //lock			
 		}							// Docker Deployment and RFW stage ends here //
