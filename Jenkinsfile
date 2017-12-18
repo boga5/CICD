@@ -142,7 +142,7 @@ node {
 						def omImageName = properties_env.om_image_name.substring(0 , om_index)+":latest"
 						sh """
 							docker tag ${properties_env.om_image_name} swamykonanki/${properties_env.om_image_name}
-							docker tag ${properties_env.om_image_name} swamykonanki/${omImageName}
+		 					docker tag ${properties_env.om_image_name} swamykonanki/${omImageName}
 							docker tag ${properties_env.cp_image_name} swamykonanki/${properties_env.cp_image_name}
 							docker tag ${properties_env.cp_image_name} swamykonanki/${cpImageName}
 							"""
