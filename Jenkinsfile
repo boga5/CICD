@@ -159,18 +159,18 @@ node {
 							docker tag ${docker_properties.cp_image_name} swamykonanki/${docker_properties.cp_image_name}
 							docker tag ${docker_properties.cp_image_name} swamykonanki/${cpImageName}
 							"""
-						/*	docker.withRegistry("https://index.docker.io/v1/", 'DockerCredentialsID'){
-								def customImage1 = docker.image("swamykonanki/${properties.om_image_name}")
+							docker.withRegistry("https://index.docker.io/v1/", 'DockerCredentialsID'){
+								def customImage1 = docker.image("swamykonanki/${docker_properties.om_image_name}")
 								customImage1.push()
 								def customImage2 = docker.image("swamykonanki/${omImageName}")
 								customImage2.push()
-								def customImage3 = docker.image("swamykonanki/${properties.cp_image_name}")
+								def customImage3 = docker.image("swamykonanki/${docker_properties.cp_image_name}")
 								customImage3.push()
 								def customImage4 = docker.image("swamykonanki/${cpImageName}")
 								customImage4.push()
 							}
 							sh """docker logout""" 
-					*/
+					
 					}  //docker push
 				
 					// ***** Stage for triggering CD pipeline ***** //				
