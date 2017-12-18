@@ -148,7 +148,7 @@ node {
 						server.publishBuildInfo buildInfo
 					}	*/
 					// ***** Stage for Publishing Docker images ***** //							
-					/*stage ('Publish Docker Images'){
+					stage ('Publish Docker Images'){
 						Reason = "Publish Docker Images Failed"
 						def cp_index = properties.cp_image_name.indexOf(":");								
 						def cpImageName = properties.cp_image_name.substring(0 , cp_index)+":latest"
@@ -160,7 +160,7 @@ node {
 							docker tag ${properties.cp_image_name} swamykonanki/${properties.cp_image_name}
 							docker tag ${properties.cp_image_name} swamykonanki/${cpImageName}
 							"""
-							docker.withRegistry("https://index.docker.io/v1/", 'DockerCredentialsID'){
+						/*	docker.withRegistry("https://index.docker.io/v1/", 'DockerCredentialsID'){
 								def customImage1 = docker.image("swamykonanki/${properties.om_image_name}")
 								customImage1.push()
 								def customImage2 = docker.image("swamykonanki/${omImageName}")
@@ -170,9 +170,9 @@ node {
 								def customImage4 = docker.image("swamykonanki/${cpImageName}")
 								customImage4.push()
 							}
-							sh """docker logout"""
-					
-					} */ //docker push
+							sh """docker logout""" 
+					*/
+					}  //docker push
 				
 					// ***** Stage for triggering CD pipeline ***** //				
 					stage ('Starting QA job') {
