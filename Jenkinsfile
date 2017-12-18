@@ -64,15 +64,14 @@ node {
 		stage ('Reading Branch Varibles ')	{
 			sh 'env >Jenkins_env'
 			
-	        content = readFile './Jenkins_env'				// variable to store .env file contents
-	        Properties properties_Jenkins_env = new Properties()	// creating an object for Properties class
-	        contents = new ByteArrayInputStream(content.getBytes());	// storing the contents
-	        properties_Jenkins_env.load(contents)	
-	        contents = null
-	        //sh'echo completed'
-            Reason = "lockVar stage Failed"
-            JobName = properties_Jenkins_env.JOB_NAME
-            def BRANCH_NAME = properties_Jenkins_env.BRANCH_NAME
+	        	content = readFile './Jenkins_env'				// variable to store .env file contents
+	        	Properties properties_Jenkins_env = new Properties()	// creating an object for Properties class
+	        	contents = new ByteArrayInputStream(content.getBytes());	// storing the contents
+	        	properties_Jenkins_env.load(contents)	
+	        	contents = null
+            		Reason = "lockVar stage Failed"
+            		JobName = properties_Jenkins_env.JOB_NAME
+            		def BRANCH_NAME = properties_Jenkins_env.BRANCH_NAME
 			if(BRANCH_NAME.startsWith('PR-'))	
 			{
 				def index = JobName.indexOf("/");
