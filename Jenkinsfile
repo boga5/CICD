@@ -30,7 +30,7 @@ emailext (
  </span>''', subject: '$DEFAULT_SUBJECT', to: 'yerriswamy.konanki@ggktech.com, sunil.boga@ggktech.com'
  )
 }
- 
+
 // Email Notifications template when Build fails //
 def notifyFailure(def Reason){
 println "Failed Reason: ${Reason}"
@@ -125,11 +125,12 @@ node {
 				robot_result_folder = docker_properties.robot_result_folder
 				//sh 'echo /home/robot/${robot_result_folder}/report.html'
 				step([$class: 'RobotPublisher',
-					outputPath: "/home/robot/${robot_result_folder}",
+					outputPath: "/home/robot/results",
 					passThreshold: 0,
 					unstableThreshold: 0,
 					otherFiles: ""])
 				// If Robot Framework test case fails, then the build will be failed //	
+
             //    println currentBuild.result
 				if("${currentBuild.result}" == "FAILURE")
 					 {	
