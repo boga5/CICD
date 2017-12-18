@@ -139,14 +139,14 @@ node {
 						 exit 1'''
 					 } */
 				// If it is a GitHub PR job, then this part doesn't execute //					 
-				if(!(JobName.contains('PR-')))
+			/*	if(!(JobName.contains('PR-')))
 				{
 					 // ***** Stage for Deploying artifacts to Artifactory ***** //				
-				/*	stage ('Artifacts Deployment'){		
+				stage ('Artifacts Deployment'){		
 						Reason = "Artifacts Deployment Failed"
 						rtMaven.deployer.deployArtifacts buildInfo
 						server.publishBuildInfo buildInfo
-					}	*/	
+					}	
 					// ***** Stage for Publishing Docker images ***** //							
 					stage ('Publish Docker Images'){
 						Reason = "Publish Docker Images Failed"
