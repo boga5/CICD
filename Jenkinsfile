@@ -132,14 +132,14 @@ node {
 					otherFiles: ""])
 				// If Robot Framework test case fails, then the build will be failed //	
             //    println currentBuild.result
-				/*if("${currentBuild.result}" == "FAILURE")
+				if("${currentBuild.result}" == "FAILURE")
 					 {	
 						 sh ''' ./clean_up.sh
                          echo "after cleanup"
 						 exit 1'''
 					 } 
 				// If it is a GitHub PR job, then this part doesn't execute //					 
-				if(!(JobName.contains('PR-')))
+				/*if(!(JobName.contains('PR-')))
 				{
 					 // ***** Stage for Deploying artifacts to Artifactory ***** //				
 				stage ('Artifacts Deployment'){		
