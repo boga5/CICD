@@ -118,10 +118,10 @@ node {
 			Reason = "Docker Deployment or Robot Framework Test cases Failed"
 			lock(lock_resource_name) {
 				// Docker Compose starts // 
-				//sh "jarfile_name=${jar_name} /usr/local/bin/docker-compose up -d"
-				//sh "sudo chmod 777 wait_for_robot.sh "
+				sh "jarfile_name=${jar_name} /usr/local/bin/docker-compose up -d"
+				sh "sudo chmod 777 wait_for_robot.sh "
 				//println "wait_for_robot"
-				//sh './wait_for_robot.sh'
+				sh './wait_for_robot.sh'
 				robot_result_folder = properties.robot_result_folder
 				//sh 'echo /home/robot/${robot_result_folder}/report.html'
 				step([$class: 'RobotPublisher',
@@ -130,7 +130,7 @@ node {
 					unstableThreshold: 0,
 					otherFiles: ""])
 				// If Robot Framework test case fails, then the build will be failed //	
-				/*if("${currentBuild.result}" == "FAILURE")
+				if("${currentBuild.result}" == "FAILURE")
 					 {	
 						 sh ''' ./clean_up.sh
 						 exit 1'''
