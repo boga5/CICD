@@ -12,7 +12,7 @@ def lock_resource_name = null 					// variable for storing lock resource name
 def getMavenBuildArtifactName() {
  pom = readMavenPom file: 'pom.xml'
  return "${pom.artifactId}-${pom.version}.${pom.packaging}"
-}
+} 
 
 // Email Notifications template when Build succeeds //
 def notifySuccessful(){
