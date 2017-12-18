@@ -81,7 +81,7 @@ node {
 /****************************** Building the Application and performing SonarQube analysis ******************************/	
 		stage ('Maven Build') {
 			Reason = "Maven Build Failed"
-			rtMaven.deployer server: server, snapshotRepo: '${docker_properties.snapshot_repo}', releaseRepo: '${docker_properties.release_repo}'			//Deploying artifacts to this repo //
+			rtMaven.deployer server: server, snapshotRepo: docker_properties.snapshot_repo, releaseRepo: docker_properties.release_repo			//Deploying artifacts to this repo //
 			rtMaven.deployer.deployArtifacts = false		//this will not publish artifacts soon after build succeeds	//
 			rtMaven.tool = 'maven'							//Defining maven tool //
 			// Maven build starts here //
@@ -168,11 +168,11 @@ node {
 				// Mandatory parameters
 				'buildName'          : buildInfo.name,
 				'buildNumber'        : buildInfo.number,
-				'targetRepo'         : 'release_repo',
+				'targetRepo'         : docker_properties.release_repo,
 	 
 				// Optional parameters
 				'comment'            : 'PROMOTION SUCCESSFULLY COMPLETED',
-				'sourceRepo'         : 'snapshot_repo',
+				'sourceRepo'         : docker_properties.snapshot_repo,
 				'status'             : 'Released',
 				'includeDependencies': false,
 				'copy'               : false,
