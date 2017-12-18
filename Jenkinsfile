@@ -108,7 +108,7 @@ node {
 			Reason = "Docker Deployment or Robot Framework Test cases Failed"
 			lock(lock_resource_name) {
 				// Docker Compose starts // 
-				//sh "jarfile_name=${jar_name} /usr/local/bin/docker-compose up -d"
+				sh "jarfile_name=${jar_name} /usr/local/bin/docker-compose up -d"
 				//sh "sudo chmod 777 wait_for_robot.sh "
 				//println "wait_for_robot"
 				//sh './wait_for_robot.sh'
@@ -119,7 +119,7 @@ node {
 					unstableThreshold: 0,
 					otherFiles: ""])
 				// If Robot Framework test case fails, then the build will be failed //	
-				/*if("${currentBuild.result}" == "FAILURE")
+				if("${currentBuild.result}" == "FAILURE")
 					 {	
 						 sh ''' ./clean_up.sh
 						 exit 1'''
@@ -163,11 +163,11 @@ node {
 					// ***** Stage for triggering CD pipeline ***** //				
 					stage ('Starting ART job') {
 					Reason = "Trriggering downStream Job Failed"
-                    Job_name = Sonar_project_name + "QA"
-		   			 	build job: Job_name//, parameters: [[$class: 'StringParameterValue', name: 'var1', value: 'var1_value']]
+                    			Job_name = Sonar_project_name + "QA"
+		   			build job: Job_name//, parameters: [[$class: 'StringParameterValue', name: 'var1', value: 'var1_value']]
 					} 
 				}
-				sh './clean_up.sh'	*/
+				sh './clean_up.sh'	
 			}				
 		}							// Docker Deployment and RFW stage ends here //
 
