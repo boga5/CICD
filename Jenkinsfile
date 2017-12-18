@@ -162,7 +162,7 @@ node {
 							docker tag ${docker_properties.cp_image_name} swamykonanki/${docker_properties.cp_image_name}
 							docker tag ${docker_properties.cp_image_name} swamykonanki/${cpImageName}
 							"""
-							docker.withRegistry("https://index.docker.io/v1/", '46090ba9-5668-42c3-9f90-c8a7f2d7da8a'){
+							docker.withRegistry("https://index.docker.io/v1/", 'DockerCredentialsID'){
 								def customImage1 = docker.image("swamykonanki/${docker_properties.om_image_name}")
 								customImage1.push()
 								def customImage2 = docker.image("swamykonanki/${omImageName}")
