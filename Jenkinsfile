@@ -27,10 +27,10 @@ emailext (
  <b style=\'font-family: Candara;\'>${BUILD_LOG_REGEX, regex="http://padlcicdggk4.sw.fortna.net:8088/artifactory/webapp/*", linesBefore=0, linesAfter=0, maxMatches=1, showTruncatedLines=false, escapeHtml=true}<b></p>
  <p><br><br>${SCRIPT, template="robotframework_template.groovy"}</p>
  <p><br><br><br><br><br><br><br><h2><a href="$BUILD_URL">Click Here</a> to view build result</h2><br><h3>Please find below, the build logs and other files.</h3></p>
- </span>''', subject: '$DEFAULT_SUBJECT', to: 'yerriswamy.konanki@ggktech.com, sunil.boga@ggktech.com'
+ </span>''', subject: '$DEFAULT_SUBJECT', to: 'yerriswamy.konanki@ggktech.com, sunil.boga@ggktech.com, sneha.kailasa@ggktech.com'
  )
 }
-
+ 
 // Email Notifications template when Build fails //
 def notifyFailure(def Reason){
 println "Failed Reason: ${Reason}"
@@ -39,7 +39,7 @@ emailext (
 	<h1><FONT COLOR=red>$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS</FONT></h1>
   	<h1>${BUILD_LOG_REGEX, regex="Failed Reason:", linesBefore=0, linesAfter=0, maxMatches=1, showTruncatedLines=false, escapeHtml=true}</h1>
 	<p><h2><a href="$BUILD_URL">Click Here</a> to view build result</h2><br><h3>Please find below, the build logs and other files.</h3></p>
-	</span>''', subject: '$DEFAULT_SUBJECT', to: 'sneha.kailasa@ggktech.com'
+	</span>''', subject: '$DEFAULT_SUBJECT', to: 'yerriswamy.konanki@ggktech.com, sunil.boga@ggktech.com, sneha.kailasa@ggktech.com'
 	)
 }
 
@@ -125,12 +125,11 @@ node {
 				robot_result_folder = docker_properties.robot_result_folder
 				//sh 'echo /home/robot/${robot_result_folder}/report.html'
 				step([$class: 'RobotPublisher',
-					outputPath: "/home/robot/results",
+					outputPath: "/home/robot/${robot_result_folder}",
 					passThreshold: 0,
 					unstableThreshold: 0,
 					otherFiles: ""])
 				// If Robot Framework test case fails, then the build will be failed //	
-
             //    println currentBuild.result
 				if("${currentBuild.result}" == "FAILURE")
 					 {	
@@ -160,7 +159,7 @@ node {
 							docker tag ${docker_properties.cp_image_name} swamykonanki/${docker_properties.cp_image_name}
 							docker tag ${docker_properties.cp_image_name} swamykonanki/${cpImageName}
 							"""
-						/*	docker.withRegistry("https://index.docker.io/v1/", 'DockerCredentialsID'){
+							docker.withRegistry("https://index.docker.io/v1/", 'DockerCredentialsID'){
 								def customImage1 = docker.image("swamykonanki/${docker_properties.om_image_name}")
 								customImage1.push()
 								def customImage2 = docker.image("swamykonanki/${omImageName}")
@@ -171,7 +170,7 @@ node {
 								customImage4.push()
 							}
 							sh """docker logout""" 
-					*/
+					
 					}  //docker push
 				
 					// ***** Stage for triggering CD pipeline ***** //				
