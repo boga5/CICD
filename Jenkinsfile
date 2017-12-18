@@ -130,20 +130,22 @@ node {
 					unstableThreshold: 0,
 					otherFiles: ""])
 				// If Robot Framework test case fails, then the build will be failed //	
+                println currentBuild.result
 				if("${currentBuild.result}" == "FAILURE")
 					 {	
 						 sh ''' ./clean_up.sh
+                         echo "after cleanup"
 						 exit 1'''
 					 }
 				// If it is a GitHub PR job, then this part doesn't execute //					 
 				if(!(JobName.contains('PR-')))
 				{
 					 // ***** Stage for Deploying artifacts to Artifactory ***** //				
-					stage ('Artifacts Deployment'){		
+				/*	stage ('Artifacts Deployment'){		
 						Reason = "Artifacts Deployment Failed"
 						rtMaven.deployer.deployArtifacts buildInfo
 						server.publishBuildInfo buildInfo
-					}		
+					}	*/	
 					// ***** Stage for Publishing Docker images ***** //							
 					stage ('Publish Docker Images'){
 						Reason = "Publish Docker Images Failed"
@@ -172,11 +174,11 @@ node {
 					}
 				
 					// ***** Stage for triggering CD pipeline ***** //				
-					stage ('Starting ART job') {
+					/*stage ('Starting ART job') {
 					Reason = "Trriggering downStream Job Failed"
                     Job_name = Sonar_project_name + "QA"
 		   			 	build job: Job_name//, parameters: [[$class: 'StringParameterValue', name: 'var1', value: 'var1_value']]
-					} 
+					} */
 				}
 				sh './clean_up.sh'	
 			}	                   //lock			
