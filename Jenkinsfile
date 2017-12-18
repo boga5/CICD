@@ -159,7 +159,7 @@ node {
 							docker tag ${docker_properties.cp_image_name} swamykonanki/${docker_properties.cp_image_name}
 							docker tag ${docker_properties.cp_image_name} swamykonanki/${cpImageName}
 							"""
-							docker.withRegistry("https://index.docker.io/v1/", 'DockerCredentialsID'){
+							docker.withRegistry("https://index.docker.io/v1/", "DockerCredentialsID"){
 								def customImage1 = docker.image("swamykonanki/${docker_properties.om_image_name}")
 								customImage1.push()
 								def customImage2 = docker.image("swamykonanki/${omImageName}")
@@ -176,7 +176,7 @@ node {
 					// ***** Stage for triggering CD pipeline ***** //				
 					stage ('Starting QA job') {
 						Reason = "Triggering downStream Job Failed"
-                    	Job_name = "testinglock2_master_QA"			//Sonar_project_name + "_QA"
+                    	Job_name = testinglock2_master_QA			//Sonar_project_name + "_QA"
 		   			 	build job: Job_name	//, parameters: [[$class: 'StringParameterValue', name: 'var1', value: 'var1_value']]
 					} 
 				}     //if loop
