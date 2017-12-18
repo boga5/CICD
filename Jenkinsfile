@@ -65,12 +65,12 @@ node {
 			sh 'env >Jenkins_env'
 			//sh 'ls'
 			//sh'reading'
-				def content123 = readFile './Jenkins_env'				// variable to store .env file contents
-	Properties properties123 = new Properties()	// creating an object for Properties class
-	InputStream contents123 = new ByteArrayInputStream(content123.getBytes());	// storing the contents
-	properties123.load(contents123)	
-	contents123 = null
-	//sh'echo completed'
+	        def content123 = readFile './Jenkins_env'				// variable to store .env file contents
+	        Properties properties123 = new Properties()	// creating an object for Properties class
+	        InputStream contents123 = new ByteArrayInputStream(content123.getBytes());	// storing the contents
+	        properties123.load(contents123)	
+	        contents123 = null
+	        //sh'echo completed'
             Reason = "lockVar stage Failed"
             JobName = properties123.JOB_NAME
 			//JobName = "testinglock2/latest"
@@ -116,16 +116,16 @@ node {
 /****************************** Docker Compose and Robot Framework testing on container ******************************/
 		stage ('Docker Deploy and RFW') {
 			Reason = "Docker Deployment or Robot Framework Test cases Failed"
-			lock(lockVar) {
+			lock(lock_resource_name) {
 				// Docker Compose starts // 
 				//sh "jarfile_name=${jar_name} /usr/local/bin/docker-compose up -d"
 				//sh "sudo chmod 777 wait_for_robot.sh "
 				//println "wait_for_robot"
 				//sh './wait_for_robot.sh'
-				//robot_result_folder = properties.robot_result_folder
+				robot_result_folder = properties.robot_result_folder
 				//sh 'echo /home/robot/${robot_result_folder}/report.html'
 				step([$class: 'RobotPublisher',
-					outputPath: "/home/robot/results",
+					outputPath: "/home/robot/${robot_result_folder}",
 					passThreshold: 0,
 					unstableThreshold: 0,
 					otherFiles: ""])
