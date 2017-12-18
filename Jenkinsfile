@@ -178,8 +178,8 @@ node {
 		   			 	build job: Job_name//, parameters: [[$class: 'StringParameterValue', name: 'var1', value: 'var1_value']]
 					} 
 				}
-				sh './clean_up.sh'	*/
-			}				
+				sh './clean_up.sh'	
+			}	                   //lock			
 		}							// Docker Deployment and RFW stage ends here //
 
 /****************************** Stage for artifacts promotion ******************************/
@@ -218,7 +218,7 @@ node {
 		}
 	}
 	
-	catch(Exception e)
+catch(Exception e)
 	{
 		currentBuild.result = "FAILURE"
 		notifyFailure(Reason)
