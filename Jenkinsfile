@@ -137,9 +137,9 @@ node {
 						 sh ''' ./clean_up.sh
                          echo "after cleanup"
 						 exit 1'''
-					 } */
+					 } 
 				// If it is a GitHub PR job, then this part doesn't execute //					 
-			/*	if(!(JobName.contains('PR-')))
+				if(!(JobName.contains('PR-')))
 				{
 					 // ***** Stage for Deploying artifacts to Artifactory ***** //				
 				stage ('Artifacts Deployment'){		
@@ -175,12 +175,12 @@ node {
 					}
 				
 					// ***** Stage for triggering CD pipeline ***** //				
-					/*stage ('Starting ART job') {
+					stage ('Starting ART job') {
 					Reason = "Trriggering downStream Job Failed"
                     Job_name = Sonar_project_name + "QA"
 		   			 	build job: Job_name//, parameters: [[$class: 'StringParameterValue', name: 'var1', value: 'var1_value']]
-					} */
-				}
+					} 
+				}*/     //if loop
 				sh './clean_up.sh'	
 			}	                   //lock			
 		}							// Docker Deployment and RFW stage ends here //
