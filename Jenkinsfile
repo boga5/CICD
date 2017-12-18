@@ -141,7 +141,7 @@ node {
 				if(!(JobName.contains('PR-')))
 				{
 					 // ***** Stage for Deploying artifacts to Artifactory ***** //				
-			/*	stage ('Artifacts Deployment'){		
+			/*		stage ('Artifacts Deployment'){		
 						Reason = "Artifacts Deployment Failed"
 						rtMaven.deployer.deployArtifacts buildInfo
 						server.publishBuildInfo buildInfo
@@ -175,12 +175,12 @@ node {
 				
 					// ***** Stage for triggering CD pipeline ***** //				
 					stage ('Starting QA job') {
-					Reason = "Trriggering downStream Job Failed"
-                    Job_name = testinglock2_master_QA			//Sonar_project_name + "_QA"
-		   			 	build job: Job_name//, parameters: [[$class: 'StringParameterValue', name: 'var1', value: 'var1_value']]
+						Reason = "Triggering downStream Job Failed"
+                    	Job_name = "testinglock2_master_QA"			//Sonar_project_name + "_QA"
+		   			 	build job: Job_name	//, parameters: [[$class: 'StringParameterValue', name: 'var1', value: 'var1_value']]
 					} 
 				}     //if loop
-				sh './clean_up.sh'	
+				sh "./clean_up.sh"
 			}	                   //lock			
 		}							// Docker Deployment and RFW stage ends here //
 
