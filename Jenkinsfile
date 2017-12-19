@@ -83,6 +83,7 @@ node {
 	
 /****************************** Building the Application and performing SonarQube analysis ******************************/	
 		stage ('Maven Build') {
+			sh 'exit 1'
 			Reason = "Maven Build Failed"
 			rtMaven.deployer server: server, snapshotRepo: docker_properties.snapshot_repo, releaseRepo: docker_properties.release_repo			//Deploying artifacts to this repo //
 			rtMaven.deployer.deployArtifacts = false		//this will not publish artifacts soon after build succeeds	//
