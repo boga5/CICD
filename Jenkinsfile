@@ -21,12 +21,12 @@ emailext (
  <h1><FONT COLOR=Green>$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS</FONT></h1><h2 style=\'color:#e46c0a\'>GitHub Details</h2>
  <B>${BUILD_LOG_REGEX, regex="Started by ", linesBefore=0, linesAfter=1, maxMatches=1, showTruncatedLines=false, escapeHtml=true}<br>
  ${BUILD_LOG_REGEX, regex="Checking out Revision", linesBefore=0, linesAfter=1, maxMatches=1, showTruncatedLines=false, escapeHtml=true}</B>
- <p><!-- ${SCRIPT, template="unit_test_results.groovy"} --></p>
- <p><br><br>${SCRIPT, template="sonarqube_template.groovy"}<br></p>
- <p><br><br><br><br><br><br><br><h2 style=\'color:#e46c0a; font-family: Candara;\'>Artifactory Details</h2>
- <b style=\'font-family: Candara;\'>${BUILD_LOG_REGEX, regex="http://padlcicdggk4.sw.fortna.net:8088/artifactory/webapp/*", linesBefore=0, linesAfter=0, maxMatches=1, showTruncatedLines=false, escapeHtml=true}<b></p>
- <p><br><br>${SCRIPT, template="robotframework_template_tmp.groovy"}</p>
- <p><br><br><br><br><br><br><br><h2><a href="$BUILD_URL">Click Here</a> to view build result</h2><br><h3>Please find below, the build logs and other files.</h3></p>
+ <table><tr><td><!-- ${SCRIPT, template="unit_test_results.groovy"} --></td></tr>
+ <tr><td>${SCRIPT, template="sonarqube_template.groovy"}</td></tr>
+ <tr><td><h2 style=\'color:#e46c0a; font-family: Candara;\'>Artifactory Details</h2></td></tr>
+ <tr><td><b style=\'font-family: Candara;\'>${BUILD_LOG_REGEX, regex="http://padlcicdggk4.sw.fortna.net:8088/artifactory/webapp/*", linesBefore=0, linesAfter=0, maxMatches=1, showTruncatedLines=false, escapeHtml=true}</td></tr>
+ <tr><td>${SCRIPT, template="robotframework_template_tmp.groovy"}</td></tr>
+ <tr><td><a href="$BUILD_URL">Click Here</a> to view build result</h2><br><h3>Please find below, the build logs and other files.</td></tr></table>
  </span>''', subject: '$DEFAULT_SUBJECT', to: 'sneha.kailasa@ggktech.com, yerriswamy.konanki@ggktech.com, sunil.boga@ggktech.com'
  )
 }
@@ -82,7 +82,6 @@ node {
 	
 /****************************** Building the Application and performing SonarQube analysis ******************************/	
 		stage ('Maven Build') {
-			sh 'exit 1'
 			Reason = "Maven Build Failed"
 			rtMaven.deployer server: server, snapshotRepo: docker_properties.snapshot_repo, releaseRepo: docker_properties.release_repo			//Deploying artifacts to this repo //
 			rtMaven.deployer.deployArtifacts = false		//this will not publish artifacts soon after build succeeds	//
