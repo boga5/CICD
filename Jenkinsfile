@@ -201,7 +201,6 @@ catch(Exception e)
 	{
 		sh './clean_up.sh'
 		currentBuild.result = "FAILURE"
-		currentBuild.description = Reason
 		notifyFailure(Reason)
 		sh 'exit 1'
 	}
