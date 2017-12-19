@@ -144,7 +144,8 @@ node {
                     			customImage.push()
                 			}
 						}
-						sh """docker logout""" 
+						sh """docker logout
+							rm docker_images""" 
 					
 					}  //Docker publish stage ends here
 				
