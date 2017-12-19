@@ -71,5 +71,12 @@ if [ ! -z "$image_status" ];
 then
   docker rmi -f $ImageName
 fi
+###############################################
+image_status=`docker images -a | grep "$robot_image_name"`
+
+if [ ! -z "$image_status" ];
+then
+  docker rmi -f $robot_image_name
+fi
 
 echo "Removed all containers"
