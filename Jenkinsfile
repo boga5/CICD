@@ -1,5 +1,5 @@
-/****************************** Environment variables ******************************/ 
-def JobName	= null						// variable to get jobname 
+/****************************** Environment variables ******************************/  
+def JobName	= null						// variable to get jobname  
 def Sonar_project_name = null 							// varibale passed as SonarQube parameter while building the application
 def robot_result_folder = null 				// variable used to store Robot Framework test results
 def server = Artifactory.server 'server1'	// Artifactory server instance declaration. 'server1' is the Server ID given to Artifactory server in Jenkins
@@ -25,7 +25,7 @@ emailext (
  <p><br><br>${SCRIPT, template="sonarqube_template.groovy"}<br></p>
  <p><br><br><br><br><br><br><br><h2 style=\'color:#e46c0a; font-family: Candara;\'>Artifactory Details</h2>
  <b style=\'font-family: Candara;\'>${BUILD_LOG_REGEX, regex="http://padlcicdggk4.sw.fortna.net:8088/artifactory/webapp/*", linesBefore=0, linesAfter=0, maxMatches=1, showTruncatedLines=false, escapeHtml=true}<b></p>
- <p><br><br>${SCRIPT, template="robotframework_template.groovy"}</p>
+ <p><br><br>${SCRIPT, template="robotframework_template_tmp.groovy"}</p>
  <p><br><br><br><br><br><br><br><h2><a href="$BUILD_URL">Click Here</a> to view build result</h2><br><h3>Please find below, the build logs and other files.</h3></p>
  </span>''', subject: '$DEFAULT_SUBJECT', to: 'sneha.kailasa@ggktech.com, yerriswamy.konanki@ggktech.com, sunil.boga@ggktech.com'
  )
@@ -151,7 +151,7 @@ node {
 					// ***** Stage for triggering CD pipeline ***** //				
 					stage ('Starting QA job') {
 					Reason = "Trriggering downStream Job Failed"
-                    CD_Job_name = Sonar_project_name + "_QA"
+                    CD_Job_name = 'testinglock2_master_QA' //Sonar_project_name + "_QA"
 		   			 	build job: CD_Job_name//, parameters: [[$class: 'StringParameterValue', name: 'var1', value: 'var1_value']]
 					} 
 				}     //if loop
@@ -160,7 +160,7 @@ node {
 		}		// Docker Deployment and RFW stage ends here //
 
 /****************************** Stage for artifacts promotion ******************************/
-/*		stage ('Build Promotions') {
+	/*	stage ('Build Promotions') {
 			Reason = "Build Promotions Failed"
 			def promotionConfig = [
 				// Mandatory parameters
@@ -179,16 +179,14 @@ node {
 	 
 			// Interactive promotion of Builds in Artifactory server from Jenkins UI //
 			Artifactory.addInteractivePromotion server: server, promotionConfig: promotionConfig, displayName: "Promotions Time" //this need human interaction to promote
-		}
-	*/
+		} */
+		
 /****************************** Stage for creating reports for SonarQube Analysis ******************************/
 	/*	stage ('Reports creation') {
 			Reason = "Reports creation Failed"
-						sh """ echo ${Sonar_project_name} 
-			curl "http://10.240.17.12:9000/sonar/api/resources?resource=${Sonar_project_name}&metrics=bugs,vulnerabilities,code_smells,duplicated_blocks" > output.json
-			"""
-		}
-*/
+			sh """ curl "http://10.240.17.12:9000/sonar/api/resources?resource=${Sonar_project_name}&metrics=bugs,vulnerabilities,code_smells,duplicated_blocks" > output.json """
+		} */
+		
 /****************************** Stage for sending Email Notifications when Build succeeds ******************************/	
 		stage ('Email Notifications') {
 			notifySuccessful() 
@@ -197,6 +195,7 @@ node {
 	
 catch(Exception e)
 	{
+		sh './clean_up.sh'
 		currentBuild.result = "FAILURE"
 		notifyFailure(Reason)
 		sh 'exit 1'
