@@ -31,14 +31,6 @@ if [ ! -z "$Container_status" ];
 then
   docker rm -f $om_container_name
 fi
-#################################################
-image_name=$(echo $robot_image_name| cut -d':' -f 1)
-image_status=`docker images -a | grep "$image_name"`
-
-if [ ! -z "$image_status" ];
-then
-  docker rmi -f $robot_image_name
-fi
 ################################################
 image_name=$(echo $cp_image_name| cut -d':' -f 1)
 image_status=`docker images -a | grep "$image_name"`
@@ -46,7 +38,8 @@ image_status=`docker images -a | grep "$image_name"`
 if [ ! -z "$image_status" ];
 then
   docker rmi -f $cp_image_name
- # docker rmi -f swamykonanki/$cp_image_name
+  docker rmi -f $Docker_Reg_Name/$image_name
+  docker rmi -f $Docker_Reg_Name/$cp_image_name
 fi
 ###############################################
 image_name=$(echo $om_image_name| cut -d':' -f 1)
@@ -54,8 +47,9 @@ image_status=`docker images -a | grep "$image_name"`
 
 if [ ! -z "$image_status" ];
 then
-  #docker rmi -f swamykonanki/$om_image_name
+  docker rmi -f $Docker_Reg_Name/$image_name
   docker rmi -f $om_image_name
+  docker rmi -f $Docker_Reg_Name/$om_image_name
 fi
 ###############################################
 ImageName=$(echo $cp_image_name| cut -d':' -f 1)
@@ -76,6 +70,13 @@ image_status=`docker images -a | grep "$ImageName"`
 if [ ! -z "$image_status" ];
 then
   docker rmi -f $ImageName
+fi
+###############################################
+image_status=`docker images -a | grep "$robot_image_name"`
+
+if [ ! -z "$image_status" ];
+then
+  docker rmi -f $robot_image_name
 fi
 
 echo "Removed all containers"
