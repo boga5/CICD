@@ -50,6 +50,9 @@ node {
 	InputStream contents = new ByteArrayInputStream(content.getBytes());	// storing the contents
 	docker_properties.load(contents)	
 	contents = null
+	def pa = new ParametersAction([
+  		 new StringParameterValue("MYVAR", Reason)
+		 ])
 	try {
 /****************************** Git Checkout Stage ******************************/
 		stage ('Checkout') {
