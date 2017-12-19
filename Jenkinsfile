@@ -151,7 +151,7 @@ node {
 					// ***** Stage for triggering CD pipeline ***** //				
 					stage ('Starting QA job') {
 					Reason = "Trriggering downStream Job Failed"
-                    CD_Job_name = testinglock2_master_QA //Sonar_project_name + "_QA"
+                    CD_Job_name = "testinglock2_master_QA" //Sonar_project_name + "_QA"
 		   			 	build job: CD_Job_name//, parameters: [[$class: 'StringParameterValue', name: 'var1', value: 'var1_value']]
 					} 
 				}     //if loop
