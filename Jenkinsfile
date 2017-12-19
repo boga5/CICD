@@ -1,5 +1,5 @@
-/****************************** Environment variables ******************************/  
-def JobName	= null						// variable to get jobname  
+/****************************** Environment variables ******************************/ 
+def JobName	= null						// variable to get jobname 
 def Sonar_project_name = null 							// varibale passed as SonarQube parameter while building the application
 def robot_result_folder = null 				// variable used to store Robot Framework test results
 def server = Artifactory.server 'server1'	// Artifactory server instance declaration. 'server1' is the Server ID given to Artifactory server in Jenkins
@@ -25,7 +25,7 @@ emailext (
  <p><br><br>${SCRIPT, template="sonarqube_template.groovy"}<br></p>
  <p><br><br><br><br><br><br><br><h2 style=\'color:#e46c0a; font-family: Candara;\'>Artifactory Details</h2>
  <b style=\'font-family: Candara;\'>${BUILD_LOG_REGEX, regex="http://padlcicdggk4.sw.fortna.net:8088/artifactory/webapp/*", linesBefore=0, linesAfter=0, maxMatches=1, showTruncatedLines=false, escapeHtml=true}<b></p>
- <p><br><br>${SCRIPT, template="robotframework_template_tmp.groovy"}</p>
+ <p><br><br>${SCRIPT, template="robotframework_template.groovy"}</p>
  <p><br><br><br><br><br><br><br><h2><a href="$BUILD_URL">Click Here</a> to view build result</h2><br><h3>Please find below, the build logs and other files.</h3></p>
  </span>''', subject: '$DEFAULT_SUBJECT', to: 'sneha.kailasa@ggktech.com, yerriswamy.konanki@ggktech.com, sunil.boga@ggktech.com'
  )
@@ -131,22 +131,20 @@ node {
 						def om_index = docker_properties.om_image_name.indexOf(":");
 						def omImageName = docker_properties.om_image_name.substring(0 , om_index)+":latest"
 						sh """
-							docker tag ${docker_properties.om_image_name} ${docker_properties.Docker_Reg_Name}/${docker_properties.om_image_name}
-							docker tag ${docker_properties.om_image_name} ${docker_properties.Docker_Reg_Name}/${omImageName}
-							docker tag ${docker_properties.cp_image_name} ${docker_properties.Docker_Reg_Name}/${docker_properties.cp_image_name}
-							docker tag ${docker_properties.cp_image_name} ${docker_properties.Docker_Reg_Name}/${cpImageName}
+							docker tag ${docker_properties.om_image_name} ${docker_properties.Docker_Reg_Name}/${docker_properties.om_image_name} | echo "${docker_properties.Docker_Reg_Name}/${docker_properties.om_image_name}" >> docker_images
+							docker tag ${docker_properties.om_image_name} ${docker_properties.Docker_Reg_Name}/${omImageName} | echo "${docker_properties.Docker_Reg_Name}/${omImageName}" >> docker_images
+							docker tag ${docker_properties.cp_image_name} ${docker_properties.Docker_Reg_Name}/${docker_properties.cp_image_name} | echo "${docker_properties.Docker_Reg_Name}/${docker_properties.cp_image_name}" >> docker_images
+							docker tag ${docker_properties.cp_image_name} ${docker_properties.Docker_Reg_Name}/${cpImageName} | echo "${docker_properties.Docker_Reg_Name}/${cpImageName}" >> docker_images
 							"""
-							docker.withRegistry("${docker_properties.Docker_Registry_URL}", "${docker_properties.Docker_Credentials}"){
-								def customImage1 = docker.image("${docker_properties.Docker_Reg_Name}/${docker_properties.om_image_name}")
-								customImage1.push()
-								def customImage2 = docker.image("${docker_properties.Docker_Reg_Name}/${omImageName}")
-								customImage2.push()
-								def customImage3 = docker.image("${docker_properties.Docker_Reg_Name}/${docker_properties.cp_image_name}")
-								customImage3.push()
-								def customImage4 = docker.image("${docker_properties.Docker_Reg_Name}/${cpImageName}")
-								customImage4.push()
-							}
-							sh """docker logout""" 
+						def file = readFile "docker_images"		// read image names from this file
+       					def lines = file.readLines()	
+						docker.withRegistry("${docker_properties.Docker_Registry_URL}", "${docker_properties.Docker_Credentials}"){
+							lines.each { String image ->
+                    			def customImage = docker.image("$image")
+                    			customImage.push()
+                			}
+						}
+						sh """docker logout""" 
 					
 					}  //Docker publish stage ends here
 				
@@ -199,7 +197,6 @@ node {
 	
 catch(Exception e)
 	{
-		sh './clean_up.sh'
 		currentBuild.result = "FAILURE"
 		notifyFailure(Reason)
 		sh 'exit 1'
