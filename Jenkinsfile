@@ -140,8 +140,9 @@ node {
        					def lines = file.readLines()	
 						docker.withRegistry("${docker_properties.Docker_Registry_URL}", "${docker_properties.Docker_Credentials}"){
 							lines.each { String image ->
-                    			def customImage = docker.image("$image")
-                    			customImage.push()
+								docker.image("$image").push()
+                    			//def customImage = docker.image("$image")
+                    			//customImage.push()
                 			}
 						}
 						sh """docker logout
