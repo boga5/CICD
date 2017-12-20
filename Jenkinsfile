@@ -157,8 +157,9 @@ node {
 						array[1] = properties.cp_image_name
 		 				docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
              						array.each { def a ->
-								docker.image("${docker_properties.Docker_Reg_Name}/$a").push()
-								def temp = ${docker_properties.Docker_Reg_Name}/$a.substring(0 , $a.indexOf(":"))+":latest"
+								def temp = "${docker_properties.Docker_Reg_Name}/$a"
+								docker.image("$temp").push()
+								temp = ${docker_properties.Docker_Reg_Name}/$a.substring(0 , $a.indexOf(":"))+":latest"
 								docker.image("$temp").push
         							}
 							}
