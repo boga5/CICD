@@ -68,14 +68,14 @@ node {
             JobName = "${JOB_NAME}"
 			if("${BRANCH_NAME}".startsWith('PR-'))
 			{
-                def index = JobName.indexOf("/");
-				lock_resource_name = JobName.substring(0 , index)+"_"+"${CHANGE_TARGET}"
+               // def index = JobName.indexOf("/");
+				lock_resource_name = JobName.substring(0 , JobName.indexOf("/"))+"_"+"${CHANGE_TARGET}"
                 Sonar_project_name = lock_resource_name + "PR"
 			}
 			else
 			{
-				 def index = JobName.indexOf("/");
-				 lock_resource_name = JobName.substring(0 , index)+"_"+"${BRANCH_NAME}"
+				// def index = JobName.indexOf("/");
+				 lock_resource_name = JobName.substring(0 , JobName.indexOf("/"))+"_"+"${BRANCH_NAME}"
 				 Sonar_project_name = lock_resource_name
 			} 
 		}	// Reading branch variable stage ends
@@ -127,10 +127,8 @@ node {
 					}*/
 					// ***** Stage for Publishing Docker images ***** //							
 					stage ('Publish Docker Images'){
-						Reason = "Publish Docker Images Failed"
-						//def cp_index = docker_properties.cp_image_name.indexOf(":");								
+						Reason = "Publish Docker Images Failed"								
 						def cpImageName = docker_properties.cp_image_name.substring(0 , docker_properties.cp_image_name.indexOf(":"))+":latest"
-						//def om_index = docker_properties.om_image_name.indexOf(":");
 						def omImageName = docker_properties.om_image_name.substring(0 , docker_properties.om_image_name.indexOf(":"))+":latest"
 						sh """
 							docker tag ${docker_properties.om_image_name} ${docker_properties.Docker_Reg_Name}/${docker_properties.om_image_name} | echo "${docker_properties.Docker_Reg_Name}/${docker_properties.om_image_name}" >> docker_images
