@@ -126,7 +126,7 @@ node {
 						server.publishBuildInfo buildInfo
 					}*/
 					// ***** Stage for Publishing Docker images ***** //							
-					/*stage ('Publish Docker Images'){
+					stage ('Publish Docker Images'){
 						Reason = "Publish Docker Images Failed"								
 						def cpImageName = docker_properties.cp_image_name.substring(0 , docker_properties.cp_image_name.indexOf(":"))+":latest"
 						def omImageName = docker_properties.om_image_name.substring(0 , docker_properties.om_image_name.indexOf(":"))+":latest"
@@ -149,7 +149,7 @@ node {
 							rm docker_images""" 
 					
 					}  //Docker publish stage ends here
-					*/
+					/*
 					stage ('Publish Docker Images'){
 						Reason = "Publish Docker Images Failed"								
 						def array = []
@@ -163,7 +163,7 @@ node {
 						sh """docker logout
 							rm docker_images""" 
 					
-					}  //Docker publish stage ends here
+					} */ //Docker publish stage ends here
 					
 					// ***** Stage for triggering CD pipeline ***** //				
 					stage ('Starting QA job') {
