@@ -127,6 +127,7 @@ node {
 					}*/
 					// ***** Stage for Publishing Docker images ***** //							
 					stage ('Publish Docker Images'){
+						sh 'exit 1'
 						Reason = "Publish Docker Images Failed"								
 						def cpImageName = docker_properties.cp_image_name.substring(0 , docker_properties.cp_image_name.indexOf(":"))+":latest"
 						def omImageName = docker_properties.om_image_name.substring(0 , docker_properties.om_image_name.indexOf(":"))+":latest"
@@ -212,7 +213,7 @@ node {
 	
 catch(Exception e)
 	{
-		sh './clean_up.sh'
+		//sh './clean_up.sh'
 		currentBuild.result = "FAILURE"
 		notifyFailure(Reason)
 		sh 'exit 1'
