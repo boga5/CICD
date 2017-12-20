@@ -157,10 +157,7 @@ node {
 						array[1] = properties.cp_image_name
 		 				docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
              						array.each { def a ->
-								def temp = "${docker_properties.Docker_Reg_Name}/$a"
-								docker.image("$temp").push()
-								temp = ${docker_properties.Docker_Reg_Name}/$a.substring(0 , $a.indexOf(":"))+":latest"
-								docker.image("$temp").push
+								docker.image("${Docker_Reg_Name}/${a}").push()
         							}
 							}
 						sh """docker logout
