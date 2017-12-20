@@ -214,7 +214,7 @@ node {
 	
 catch(Exception e)
 	{
-		//sh './clean_up.sh'
+		sh './clean_up.sh'
 		currentBuild.result = "FAILURE"
 		notifyFailure(Reason)
 		sh 'exit 1'
