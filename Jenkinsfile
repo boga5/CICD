@@ -158,8 +158,8 @@ node {
 						array[1] = "${docker_properties.Docker_Reg_Name}/${docker_properties.cp_image_name}"
 		 				docker.withRegistry("${docker_properties.Docker_Registry_URL}", "${docker_properties.Docker_Credentials}") {
              						array.each { def a ->
-								docker.image("${a}").push()
-								def temp = docker_properties.om_image_name.substring(0 , docker_properties.om_image_name.indexOf(":"))+":latest"
+								//docker.image("${a}").push()
+								//def temp = docker_properties.om_image_name.substring(0 , docker_properties.om_image_name.indexOf(":"))+":latest"
 								docker.image("${a}").push(":10")
 								docker.image("${a}").push(":latest")
         							}
