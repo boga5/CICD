@@ -126,7 +126,7 @@ node {
 						server.publishBuildInfo buildInfo
 					}*/
 					// ***** Stage for Publishing Docker images ***** //							
-					stage ('Publish Docker Images'){
+					/*stage ('Publish Docker Images'){
 						sh 'exit 1'
 						Reason = "Publish Docker Images Failed"								
 						def cpImageName = docker_properties.cp_image_name.substring(0 , docker_properties.cp_image_name.indexOf(":"))+":latest"
@@ -150,8 +150,8 @@ node {
 							rm docker_images""" 
 					
 					}  //Docker publish stage ends here
-					
-					/*stage ('Publish Docker Images'){
+					*/
+					stage ('Publish Docker Images'){
 						Reason = "Publish Docker Images Failed"								
 						def array = []
 						array[0] = "${docker_properties.Docker_Reg_Name}/${docker_properties.om_image_name}"
@@ -159,13 +159,14 @@ node {
 		 				docker.withRegistry("${docker_properties.Docker_Registry_URL}", "${docker_properties.Docker_Credentials}") {
              						array.each { def a ->
 								docker.image("${a}").push()
+								docker.image("${a}").push(docker_properties.om_image_name.substring(0 , docker_properties.om_image_name.indexOf(":"))+":latest")
         							}
 							}
 						sh """docker logout
 							rm docker_images""" 
 					
 					}  //Docker publish stage ends here
-					*/
+					
 					// ***** Stage for triggering CD pipeline ***** //				
 					stage ('Starting QA job') {
 					Reason = "Trriggering downStream Job Failed"
