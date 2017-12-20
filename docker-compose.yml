@@ -21,7 +21,7 @@ services:
         "
   cpservice:
     env_file: .env
-    container_name: ${cp_container_name}
+    container_name: ${Docker_Reg_Name}/${cp_container_name}
     build:
       context: .
       dockerfile: src/main/docker/Dockerfile
@@ -44,7 +44,7 @@ services:
        "
   omservice:
     env_file: .env
-    container_name: ${om_container_name}
+    container_name: ${Docker_Reg_Name}/${om_container_name}
     build:
       context: .
       dockerfile: mock/Dockerfile
