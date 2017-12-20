@@ -153,11 +153,11 @@ node {
 					stage ('Publish Docker Images'){
 						Reason = "Publish Docker Images Failed"								
 						def array = []
-						array[0] = properties.om_image_name
-						array[1] = properties.cp_image_name
+						array[0] = "${docker_properties.Docker_Reg_Name}/${docker_properties.om_image_name}"
+						array[1] = "${docker_properties.Docker_Reg_Name}/${docker_properties.cp_image_name}"
 		 				docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
              						array.each { def a ->
-								docker.image("${Docker_Reg_Name}/${a}").push()
+								docker.image("${a}").push()
         							}
 							}
 						sh """docker logout
