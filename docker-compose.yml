@@ -21,7 +21,7 @@ services:
         "
   cpservice:
     env_file: .env
-    container_name: ${Docker_Reg_Name}/${cp_container_name}
+    container_name: ${cp_container_name}
     build:
       context: .
       dockerfile: src/main/docker/Dockerfile
@@ -29,7 +29,7 @@ services:
         jarfile_name: ${jarfile_name}
         port: ${port}
         db_details: ${db_details}
-    image: ${cp_image_name}
+    image: ${Docker_Reg_Name}/${cp_image_name}
     networks:
       frontend:
         aliases:
@@ -44,11 +44,11 @@ services:
        "
   omservice:
     env_file: .env
-    container_name: ${Docker_Reg_Name}/${om_container_name}
+    container_name: ${om_container_name}
     build:
       context: .
       dockerfile: mock/Dockerfile
-    image: ${om_image_name}
+    image: ${Docker_Reg_Name}/${om_image_name}
     volumes:
       - ./mock/OM/:/mock_mapping
     environment:
