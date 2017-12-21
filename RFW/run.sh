@@ -8,11 +8,14 @@
 #sh /robot/robot.sh cpserver 8080 cicd_sample/cicd_sample@52.67.80.187:1521/GGKF
 #!/bin/bash
 count=0
-while [[ ! nc -z cpservice 8080 ] && [ $count -le 180 ]]
+while ! nc -z cpservice 8080 
 do
- echo sleeping
- sleep 5
- count=`expr $count + 1`
+ if [ $count -le 180 ] 
+ then
+  echo sleeping
+  sleep 5
+  count=`expr $count + 1`
+ fi
 done
 echo "connected Sneha"
 if [ $count -le 180 ]; then
