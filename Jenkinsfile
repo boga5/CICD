@@ -116,7 +116,6 @@ node {
                          echo "after cleanup"
 						 exit 1'''
 					 } 
-					sh 'exit 1'
 				// If it is a GitHub PR job, then this part doesn't execute //					 
 				if(!(JobName.contains('PR-')))
 				{
@@ -217,7 +216,7 @@ node {
 	
 catch(Exception e)
 	{
-		//sh './clean_up.sh'
+		sh './clean_up.sh'
 		currentBuild.result = "FAILURE"
 		notifyFailure(Reason)
 		sh 'exit 1'
