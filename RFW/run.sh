@@ -1,4 +1,4 @@
-#!/bin/bash
+##!/bin/bash
 #while ! nc -z cpservice 8080;
 #        do
  #         echo sleeping;
@@ -6,12 +6,12 @@
   #      done;
  #       echo connected;
 #sh /robot/robot.sh cpserver 8080 cicd_sample/cicd_sample@52.67.80.187:1521/GGKF
-#!/bin/bash
+##!/bin/bash
 count=0
 while [ ! nc -z cpservice 8080 -a $count -le 180 ]
 do
- echo sleeping;
- sleep 5;
+ echo sleeping
+ sleep 5
  count=`expr $count + 1`
 done
 echo "connected Sneha"
