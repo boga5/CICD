@@ -129,7 +129,7 @@ node {
 						images[0] = "${docker_properties.Docker_Reg_Name}/${docker_properties.om_image_name}"
 						images[1] = "${docker_properties.Docker_Reg_Name}/${docker_properties.cp_image_name}"
 		 				docker.withRegistry("${docker_properties.Docker_Registry_URL}", "${docker_properties.Docker_Credentials}") {
-             						array.each { def image ->
+             						images.each { def image ->
 								docker.image("${image}").push("${docker_properties.version}")
 								docker.image("${image}").push("latest")
         							}
