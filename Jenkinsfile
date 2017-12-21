@@ -123,31 +123,6 @@ node {
 						server.publishBuildInfo buildInfo
 					}*/
 					// ***** Stage for Publishing Docker images ***** //							
-					/*stage ('Publish Docker Images'){
-						sh 'exit 1'
-						Reason = "Publish Docker Images Failed"								
-						def cpImageName = docker_properties.cp_image_name.substring(0 , docker_properties.cp_image_name.indexOf(":"))+":latest"
-						def omImageName = docker_properties.om_image_name.substring(0 , docker_properties.om_image_name.indexOf(":"))+":latest"
-						sh """
-							docker tag ${docker_properties.om_image_name} ${docker_properties.Docker_Reg_Name}/${docker_properties.om_image_name} | echo "${docker_properties.Docker_Reg_Name}/${docker_properties.om_image_name}" >> docker_images
-							docker tag ${docker_properties.om_image_name} ${docker_properties.Docker_Reg_Name}/${omImageName} | echo "${docker_properties.Docker_Reg_Name}/${omImageName}" >> docker_images
-							docker tag ${docker_properties.cp_image_name} ${docker_properties.Docker_Reg_Name}/${docker_properties.cp_image_name} | echo "${docker_properties.Docker_Reg_Name}/${docker_properties.cp_image_name}" >> docker_images
-							docker tag ${docker_properties.cp_image_name} ${docker_properties.Docker_Reg_Name}/${cpImageName} | echo "${docker_properties.Docker_Reg_Name}/${cpImageName}" >> docker_images
-							"""
-						def file = readFile "docker_images"		// read image names from this file
-       					def lines = file.readLines()	
-						docker.withRegistry("${docker_properties.Docker_Registry_URL}", "${docker_properties.Docker_Credentials}"){
-							lines.each { String image ->
-								docker.image("$image").push()
-                    			//def customImage = docker.image("$image")
-                    			//customImage.push()
-                			}
-						}
-						sh """docker logout
-							rm docker_images""" 
-					
-					}  //Docker publish stage ends here
-					*/
 					stage ('Publish Docker Images'){
 						Reason = "Publish Docker Images Failed"								
 						def array = []
@@ -157,7 +132,7 @@ node {
              						array.each { def a ->
 								//docker.image("${a}").push()
 								//def temp = docker_properties.om_image_name.substring(0 , docker_properties.om_image_name.indexOf(":"))+":latest"
-								docker.image("${a}").push("10")
+								docker.image("${a}").push("${docker_properties.version}")
 								docker.image("${a}").push("latest")
         							}
 							}
