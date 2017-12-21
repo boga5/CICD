@@ -8,7 +8,7 @@
 #sh /robot/robot.sh cpserver 8080 cicd_sample/cicd_sample@52.67.80.187:1521/GGKF
 #!/bin/bash
 count = 0
-while [[ ! nc -z cpservice 8080 ] -a [ $count -le 180 ]] ;
+while [[ ! nc -z cpservice 8080 ] && [ $count -le 180 ]] ;
         do
           echo sleeping;
           sleep 5;
