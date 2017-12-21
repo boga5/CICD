@@ -84,6 +84,7 @@ image_status=`docker images -a | grep "${Docker_Reg_Name}/${om_image_name}"`
 if [ ! -z "$image_status" ];
 then
   docker rmi -f ${Docker_Reg_Name}/${om_image_name}
+  docker rmi -f ${Docker_Reg_Name}/${om_image_name}:10
 fi
 ###############################################
 image_status=`docker images -a | grep "${Docker_Reg_Name}/${cp_image_name}"`
@@ -91,6 +92,7 @@ image_status=`docker images -a | grep "${Docker_Reg_Name}/${cp_image_name}"`
 if [ ! -z "$image_status" ];
 then
   docker rmi -f ${Docker_Reg_Name}/${cp_image_name}
+  docker rmi -f ${Docker_Reg_Name}/${cp_image_name}:10
 fi
 
 echo "Removed all containers"
