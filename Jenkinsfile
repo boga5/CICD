@@ -125,15 +125,13 @@ node {
 					// ***** Stage for Publishing Docker images ***** //							
 					stage ('Publish Docker Images'){
 						Reason = "Publish Docker Images Failed"								
-						def array = []
-						array[0] = "${docker_properties.Docker_Reg_Name}/${docker_properties.om_image_name}"
-						array[1] = "${docker_properties.Docker_Reg_Name}/${docker_properties.cp_image_name}"
+						def images = []
+						images[0] = "${docker_properties.Docker_Reg_Name}/${docker_properties.om_image_name}"
+						images[1] = "${docker_properties.Docker_Reg_Name}/${docker_properties.cp_image_name}"
 		 				docker.withRegistry("${docker_properties.Docker_Registry_URL}", "${docker_properties.Docker_Credentials}") {
-             						array.each { def a ->
-								//docker.image("${a}").push()
-								//def temp = docker_properties.om_image_name.substring(0 , docker_properties.om_image_name.indexOf(":"))+":latest"
-								docker.image("${a}").push("${docker_properties.version}")
-								docker.image("${a}").push("latest")
+             						array.each { def image ->
+								docker.image("${image}").push("${docker_properties.version}")
+								docker.image("${image}").push("latest")
         							}
 							}
 						sh """docker logout
