@@ -14,6 +14,7 @@ while [ ! nc -z cpservice 8080 ] -a [ $count -le 180 ] ;
           sleep 5;
           count = $count+1
         done;
+        echo "connected Sneha"
 if [ $count -le 180 ]; then
         sh /robot/robot.sh cpserver 8080 cicd_sample/cicd_sample@52.67.80.187:1521/GGKF
 else
