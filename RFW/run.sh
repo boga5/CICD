@@ -7,7 +7,7 @@
  #       echo connected;
 #sh /robot/robot.sh cpserver 8080 cicd_sample/cicd_sample@52.67.80.187:1521/GGKF
 #!/bin/bash
-declare -i count = 0
+count = 0
 while [[ ! nc -z cpservice 8080 ] -a [ $count -le 180 ]] ;
         do
           echo sleeping;
