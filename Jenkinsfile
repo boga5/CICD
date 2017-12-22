@@ -88,7 +88,7 @@ node {
 			Reason = "Docker Deployment or Robot Framework Test cases Failed"
 			lock(lock_resource_name) {
 				// Docker Compose starts // 
-				sh "jarfile_name=${jar_name} /usr/local/bin/docker-compose up -d"
+				//sh "jarfile_name=${jar_name} /usr/local/bin/docker-compose up -d"
 				sh "sudo chmod 777 wait_for_robot.sh "
                 sh './wait_for_robot.sh'
 				robot_result_folder = docker_properties.robot_result_folder
