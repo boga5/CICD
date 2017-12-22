@@ -133,11 +133,11 @@ node {
 					}  //Docker publish stage ends here
 					*/
 					// ***** Stage for triggering CD pipeline ***** //				
-					stage ('Starting QA job') {
+					/*stage ('Starting QA job') {
 					Reason = "Trriggering downStream Job Failed"
                     CD_Job_name = "testinglock2_latest_QA" //Sonar_project_name + "_QA"
 		   			 	build job: CD_Job_name//, parameters: [[$class: 'StringParameterValue', name: 'var1', value: 'var1_value']]
-					} 
+					} */
 				}     //if loop
 				}
 				sh './clean_up.sh'	
