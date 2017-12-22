@@ -116,7 +116,7 @@ node {
 						server.publishBuildInfo buildInfo
 					}*/
 					// ***** Stage for Publishing Docker images ***** //							
-					stage ('Publish Docker Images'){
+					/*stage ('Publish Docker Images'){
 						Reason = "Publish Docker Images Failed"								
 						def images = []
 						images[0] = "${docker_properties.Docker_Reg_Name}/${docker_properties.om_image_name}"
@@ -131,7 +131,7 @@ node {
 							""" 
 					
 					}  //Docker publish stage ends here
-					
+					*/
 					// ***** Stage for triggering CD pipeline ***** //				
 					stage ('Starting QA job') {
 					Reason = "Trriggering downStream Job Failed"
