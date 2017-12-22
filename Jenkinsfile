@@ -17,17 +17,8 @@ def getMavenBuildArtifactName() {
 // Email Notifications template when Build succeeds //
 def notifySuccessful(){
 emailext (
- attachLog: true, attachmentsPattern: '*.html, output.xml', body: '''<span style=\'line-height: 22px; font-family: Candara; padding: 10.5px; font-size: 15px; word-break: break-all; word-wrap: break-word; \'>
- <h1><FONT COLOR=Green>$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS</FONT></h1><h2 style=\'color:#e46c0a\'>GitHub Details</h2>
- <B>${BUILD_LOG_REGEX, regex="Started by ", linesBefore=0, linesAfter=1, maxMatches=1, showTruncatedLines=false, escapeHtml=true}<br>
- ${BUILD_LOG_REGEX, regex="Checking out Revision", linesBefore=0, linesAfter=1, maxMatches=1, showTruncatedLines=false, escapeHtml=true}</B>
- <table><tr><td><!-- ${SCRIPT, template="unit_test_results.groovy"} --></td></tr>
- <tr><td>${SCRIPT, template="sonarqube_template.groovy"}</td></tr>
- <tr><td><h2 style=\'color:#e46c0a; font-family: Candara;\'>Artifactory Details</h2></td></tr>
- <tr><td><b style=\'font-family: Candara;\'>${BUILD_LOG_REGEX, regex="http://padlcicdggk4.sw.fortna.net:8088/artifactory/webapp/*", linesBefore=0, linesAfter=0, maxMatches=1, showTruncatedLines=false, escapeHtml=true}</td></tr>
- <tr><td>${SCRIPT, template="robotframework_template_tmp.groovy"}</td></tr>
- <tr><td><a href="$BUILD_URL">Click Here</a> to view build result</h2><br><h3>Please find below, the build logs and other files.</td></tr></table>
- </span>''', subject: '$DEFAULT_SUBJECT', to: 'sneha.kailasa@ggktech.com, yerriswamy.konanki@ggktech.com, sunil.boga@ggktech.com'
+ attachLog: true, attachmentsPattern: '*.html, output.xml', body: '''
+ ${SCRIPT, template="email-template.groovy"}''', subject: '$DEFAULT_SUBJECT', to: 'sneha.kailasa@ggktech.com, yerriswamy.konanki@ggktech.com, sunil.boga@ggktech.com'
  )
 }
  
