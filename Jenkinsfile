@@ -114,6 +114,8 @@ node {
 						 exit 1'''
 					 } 
 				// If it is a GitHub PR job, then this part doesn't execute //					 
+			stage('Pushing Artifacts')
+				{
 				if(!(JobName.contains('PR-')))
 				{
 					 // ***** Stage for Deploying artifacts to Artifactory ***** //				
@@ -146,6 +148,7 @@ node {
 		   			 	build job: CD_Job_name//, parameters: [[$class: 'StringParameterValue', name: 'var1', value: 'var1_value']]
 					} 
 				}     //if loop
+				}
 				sh './clean_up.sh'	
 			}   //lock			
 		}		// Docker Deployment and RFW stage ends here //
