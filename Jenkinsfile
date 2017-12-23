@@ -18,7 +18,7 @@ def getMavenBuildArtifactName() {
 def notifySuccessful(){
 emailext (
  attachLog: true, attachmentsPattern: '*.html, output.xml', body: '''
- ${SCRIPT, template="email-template.groovy"}''', subject: '$DEFAULT_SUBJECT', to: 'sneha.kailasa@ggktech.com, yerriswamy.konanki@ggktech.com, sunil.boga@ggktech.com'
+ ${SCRIPT, template="email-template.groovy"}''', subject: '$DEFAULT_SUBJECT', to: 'sneha.kailasa@ggktech.com'
  )
 }
  
@@ -30,7 +30,7 @@ emailext (
 	<h1><FONT COLOR=red>\$PROJECT_NAME - Build # \$BUILD_NUMBER - \$BUILD_STATUS</FONT></h1>
 	<h2>${Reason}</h2>
 	<p><h2><a href="\$BUILD_URL">Click Here</a> to view build result</h2><br><h3>Please find below, the build logs and other files.</h3></p>
-	</span>""", subject: '$DEFAULT_SUBJECT', to: 'sneha.kailasa@ggktech.com, sunil.boga@ggktech.com'
+	</span>""", subject: '$DEFAULT_SUBJECT', to: 'sneha.kailasa@ggktech.com'
 	)
 }
 
