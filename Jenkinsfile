@@ -1,5 +1,5 @@
 @Library('sample1') _
-node{
+node{ 
     Jenkins_File ( 
         ArtifactoryServerName: 'server1',
         snapshot_repo: 'fortna_snapshot', 
