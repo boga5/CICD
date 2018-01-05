@@ -140,7 +140,7 @@ node {
 					} */
 				}     //if loop
 				}
-				sh './clean_up.sh'	
+				//sh './clean_up.sh'	
 			}   //lock			
 		}		// Docker Deployment and RFW stage ends here //
 
@@ -180,7 +180,7 @@ node {
 	
 catch(Exception e)
 	{
-		sh './clean_up.sh'
+		//sh './clean_up.sh'
 		currentBuild.result = "FAILURE"
 		notifyFailure(Reason)
 		sh 'exit 1'
