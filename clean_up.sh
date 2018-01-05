@@ -1,6 +1,5 @@
 #!/bin/bash
 source .env
-sleep 10s
 #################################################
 Container_status=`docker ps | grep "$robot_container_name"`
 #echo $Container_status
@@ -31,26 +30,28 @@ if [ ! -z "$Container_status" ];
 then
   docker rm -f $om_container_name
 fi
-#################################################
+###############################################
 image_status=`docker images -a | grep "$robot_image_name"`
 
 if [ ! -z "$image_status" ];
 then
   docker rmi -f $robot_image_name
 fi
-################################################
-image_status=`docker images -a | grep "$cp_image_name"`
+###############################################
+image_status=`docker images -a | grep "${Docker_Reg_Name}/${om_image_name}"`
 
 if [ ! -z "$image_status" ];
 then
-  docker rmi -f $cp_image_name
+  docker rmi -f ${Docker_Reg_Name}/${om_image_name}
+  docker rmi -f ${Docker_Reg_Name}/${om_image_name}:10
 fi
 ###############################################
-image_status=`docker images -a | grep "$om_image_name"`
+image_status=`docker images -a | grep "${Docker_Reg_Name}/${cp_image_name}"`
 
 if [ ! -z "$image_status" ];
 then
-  docker rmi -f $om_image_name
+  docker rmi -f ${Docker_Reg_Name}/${cp_image_name}
+  docker rmi -f ${Docker_Reg_Name}/${cp_image_name}:10
 fi
 
 echo "Removed all containers"

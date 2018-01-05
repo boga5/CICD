@@ -29,13 +29,13 @@ services:
         jarfile_name: ${jarfile_name}
         port: ${port}
         db_details: ${db_details}
-    image: ${cp_image_name}
+    image: ${Docker_Reg_Name}/${cp_image_name}
     networks:
       frontend:
         aliases:
           - cpserver
     extra_hosts:
-      - "dbserver:52.67.80.187"
+      - "dbserver:${dbserver}"
     depends_on:
       - omservice
     command: >
@@ -48,7 +48,7 @@ services:
     build:
       context: .
       dockerfile: mock/Dockerfile
-    image: ${om_image_name}
+    image: ${Docker_Reg_Name}/${om_image_name}
     volumes:
       - ./mock/OM/:/mock_mapping
     environment:
