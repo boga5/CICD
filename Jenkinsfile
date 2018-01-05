@@ -1,4 +1,4 @@
-@Library('sample1') _
+@Library('sample1') _  
 def JobName	= null						    // variable to get jobname  
 def Sonar_project_name = null 				// varibale passed as SonarQube parameter while building the application
 def robot_result_folder = null 				// variable used to store Robot Framework test results
